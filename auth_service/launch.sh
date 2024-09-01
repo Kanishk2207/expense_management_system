@@ -17,4 +17,4 @@ fi
 # Run the container
 docker run -it --network=ecofy-net -p 8081:8080 -p 50052:50051 --restart always \
 --name $CONTAINER_NAME -v $DIR:/app \
---env-file .env $IMAGE_NAME:$IMAGE_TAG sh -c "cd cmd/user-service/ && sh"
+--env-file .env $IMAGE_NAME:$IMAGE_TAG sh -c "cd cmd/user_service/ && bash"
