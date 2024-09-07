@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"user-service/internal/configs"
 	"user-service/internal/db"
+	"user-service/internal/handler"
+	"user-service/internal/repository"
+	"user-service/internal/service"
 )
 
 func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
@@ -20,11 +22,18 @@ func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	config := configs.LoadConfig()
-	fmt.Println(config.DB_DSN)
 	db.InitDB(config.DB_DSN)
+	defer db.DB.Close()
 
 	http.HandleFunc("/health", healthCheckHandler)
 	port := config.HTTPAddress
 	fmt.Printf("Starting server on port %s...\n", port)
-	log.Fatal(http.ListenAndServe(port, nil))
+
+	userRepo := repository.NewUserRepository(db.DB)
+	authService := service.NewAuthService(userRepo)
+	authHandler := handler.NewAuthHandler(authService)
+
+	http.HandleFunc("/signup", authHandler.Signup)
+
+	http.ListenAndServe(port, nil)
 }

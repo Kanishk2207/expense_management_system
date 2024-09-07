@@ -15,9 +15,24 @@ func NewUserRepository(db *sql.DB) *UserRepositoy {
 	return userRepoPtr
 }
 
+func (r *UserRepositoy) CheckUserExists(email, username string) (bool, error) {
+	var count int
+	query := `
+        SELECT COUNT(*) 
+        FROM users 
+        WHERE email = ? OR username = ?
+    `
+	err := r.DB.QueryRow(query, email, username).Scan(&count)
+	if err != nil {
+		return false, err
+	}
+	print(count)
+	return count > 0, nil
+}
+
 func (r *UserRepositoy) CreateUser(user *models.User) error {
 	_, err := r.DB.Exec(
-		"INSERT INTO users (user_id, username, first_name, last_name, email, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+		"INSERT INTO users (user_id, username, first_name, last_name, email, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
 		user.UserID, user.Username, user.FirstName, user.LastName, user.Email, user.Password, user.CreatedAt, user.UpdatedAt,
 	)
 	return err
