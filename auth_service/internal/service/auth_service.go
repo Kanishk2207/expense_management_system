@@ -38,7 +38,7 @@ func (s *AuthService) SignUp(username, firsName, lastName, email, password strin
 
 	userPtr := &user
 
-	exists, err := s.repo.CheckUserExists(user.Email, user.Username)
+	exists, err := s.repo.CheckUserExists(user.Email, "")
 	if err != nil {
 		return err
 	}
@@ -48,8 +48,38 @@ func (s *AuthService) SignUp(username, firsName, lastName, email, password strin
 
 	err = s.repo.CreateUser(userPtr)
 	if err != nil {
-		log.Fatalf("Error occured while creating user: %v", err)
+		log.Printf("Error occured while creating user: %v", err)
 		return err
 	}
 	return nil
+}
+
+func (s *AuthService) Login(email, username, password string) (string, string, error) {
+	exists, err := s.repo.CheckUserExists(email, username)
+	if err != nil {
+		log.Printf("Error occured: %v", err)
+		return "", "", err
+	}
+
+	if !exists {
+		log.Printf("User does not exists")
+		return "", "", goerrors.ErrUserNotFound
+	}
+
+	user, err := s.repo.GetUserByEmail(email)
+	if err != nil {
+		log.Printf("Error occured: %v", err)
+		return "", "", err
+	}
+
+	err = utils.VeryfyPassword(user.Password, password)
+	if err != nil {
+		log.Printf("Error occured, Password incorrect: %v", err)
+	}
+
+	token, err := utils.GenerateJwtToken(user)
+	if err != nil {
+		log.Fatalf("Error occured, error in token generation: %v", err)
+	}
+	return user.UserID, token, nil
 }
