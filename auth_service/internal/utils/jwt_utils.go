@@ -16,6 +16,6 @@ func GenerateJwtToken(user *models.User) (string, error) {
 		"exp":     int(GetCurrentUnixTime()) + config.JWTExpiry,
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(config.JWTSecret))
 }

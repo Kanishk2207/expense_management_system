@@ -54,7 +54,7 @@ func (s *AuthService) SignUp(username, firsName, lastName, email, password strin
 	return nil
 }
 
-func (s *AuthService) Login(email, username, password string) (string, string, error) {
+func (s *AuthService) Login(email, username, password string) (userId string, token string, err error) {
 	exists, err := s.repo.CheckUserExists(email, username)
 	if err != nil {
 		log.Printf("Error occured: %v", err)
@@ -77,7 +77,7 @@ func (s *AuthService) Login(email, username, password string) (string, string, e
 		log.Printf("Error occured, Password incorrect: %v", err)
 	}
 
-	token, err := utils.GenerateJwtToken(user)
+	token, err = utils.GenerateJwtToken(user)
 	if err != nil {
 		log.Fatalf("Error occured, error in token generation: %v", err)
 	}

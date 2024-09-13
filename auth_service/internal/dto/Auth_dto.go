@@ -7,3 +7,13 @@ type SignUpRequest struct {
 	Email     string `json:"email" validate:"required"`
 	Password  string `json:"password" validate:"required"`
 }
+
+type LogInRequest struct {
+	Email    string `json:"email" validate:"required"`
+	Password string `json:"password" valiadate:"required"`
+}
+
+type LogInResponse struct {
+	UserId string `json:"user_id"`
+	Token  string `json:"token"`
+}

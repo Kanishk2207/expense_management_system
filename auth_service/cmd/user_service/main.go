@@ -34,6 +34,7 @@ func main() {
 	authHandler := handler.NewAuthHandler(authService)
 
 	http.HandleFunc("/signup", authHandler.Signup)
+	http.HandleFunc("/login", authHandler.Login)
 
 	http.ListenAndServe(port, nil)
 }
