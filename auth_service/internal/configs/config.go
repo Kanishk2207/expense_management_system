@@ -15,28 +15,18 @@ type Config struct {
 }
 
 func LoadConfig() *Config {
-
-	// err := godotenv.Load(".env")
-
-	// if err != nil {
-	// 	log.Panicln("Error loading .env")
-	// }
-
 	JWTExpiry, err := strconv.Atoi(os.Getenv("JWTEXPIRY"))
 	if err != nil {
-		log.Fatalf("Error ocured in config: %v", err)
+		log.Fatalf("Error occurred in config: %v", err)
 	}
 
 	var config Config = Config{
-		DB_DSN:      os.Getenv("dsn"),
-		GRPCAddress: ":" + os.Getenv("GRPCAddress"),
-		HTTPAddress: ":" + os.Getenv("HTTPAddress"),
+		DB_DSN:      os.Getenv("DSN"),
+		GRPCAddress: ":" + os.Getenv("GRPCADDRESS"),
+		HTTPAddress: ":" + os.Getenv("HTTPADDRESS"),
 		JWTSecret:   os.Getenv("JWTSECRET"),
 		JWTExpiry:   JWTExpiry,
 	}
 
-	var configPtr *Config = &config
-
-	return configPtr
-
+	return &config
 }

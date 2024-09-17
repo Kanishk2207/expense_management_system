@@ -22,6 +22,8 @@ func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	config := configs.LoadConfig()
+	// dsn := "dev_user:Kanishk_22@tcp(mysql-service:3306)/auth_service_db"
+	// db.InitDB(dsn)
 	db.InitDB(config.DB_DSN)
 	defer db.DB.Close()
 

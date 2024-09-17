@@ -13,3 +13,8 @@ docker run -d  --network=ecofy-net --name my_postgres   -e POSTGRES_USER=dev_use
 nodemon command:
 
 nodemon --signal SIGTERM
+
+
+docker run --name local_mysql --restart always -e MYSQL_ROOT_PASSWORD=Kanishk_22 \
+-p 127.0.0.1:3307:3306 -d mysql:8.0
+

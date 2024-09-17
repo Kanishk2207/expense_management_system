@@ -8,7 +8,8 @@ import (
 
 func AutoMigrate() {
 	// Read the migration file
-	migration, err := os.ReadFile("../../internal/db/migration.sql")
+	// migration, err := os.ReadFile("../../internal/db/migration.sql")
+	migration, err := os.ReadFile("internal/db/migration.sql")
 	if err != nil {
 		log.Fatalf("Could not read migration file: %v", err)
 	}

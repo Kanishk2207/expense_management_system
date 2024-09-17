@@ -17,9 +17,9 @@ func InitDB(dsn string) {
 	if err != nil {
 		log.Fatalf("Could not connect to DB: %v", err)
 	}
-
+	log.Printf("working fine on new %v", dsn)
 	if err := DB.Ping(); err != nil {
-		log.Fatalf("Could not ping the database: %v", err)
+		log.Printf("Could not ping the database: %v", err)
 	}
 	AutoMigrate()
 }
